@@ -1,6 +1,9 @@
 #index:
 #    path: /
 #    controller: App\Controller\DefaultController::index
+<<<<<<< HEAD
 app_blog_index:
      path: /blog/
      controller: App\Controller\BlogController::index
+=======
+>>>>>>> b86bc67bf5e2612083513de4715090a046da22bd

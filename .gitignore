@@ -17,6 +17,7 @@
 ###> symfony/web-server-bundle ###
 /.web-server-pid
 ###< symfony/web-server-bundle ###
+<<<<<<< HEAD
 
 
 # Created by https://www.gitignore.io/api/visualstudiocode
@@ -34,3 +35,5 @@
 .history
 
 # End of https://www.gitignore.io/api/visualstudiocode
+=======
+>>>>>>> b86bc67bf5e2612083513de4715090a046da22bd
