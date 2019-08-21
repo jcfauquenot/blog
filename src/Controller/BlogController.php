@@ -8,10 +8,12 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 
+/** @Route("/blog", name="blog_") */
+
 class BlogController extends AbstractController
 {
     /**
-     * @Route("/blog/show", name="blog_index")
+     * @Route("/show", name="index")
      * 
      */
     public function index()
@@ -19,9 +21,9 @@ class BlogController extends AbstractController
         return $this->render('index.html.twig');
     }
     /**
-     * @Route("/blog/show/{page}", requirements={"page"="[a-z0-9\-]+"},
+     * @Route("/show/{page}", requirements={"page"="[a-z0-9\-]+"},
      * defaults = { "page":"Mon-Super-article"},
-     * name="blog_show")
+     * name="show")
      */
     public function show($page)
     {
