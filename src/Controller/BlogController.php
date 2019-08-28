@@ -1,9 +1,10 @@
 <?php
 // src/Controller/BlogController.php
-// use Symfony\Component\Routing\Annotation\Route;
 namespace App\Controller;
 
 use Symfony\Component\Routing\Annotation\Route;
+use App\Entity\Article;
+use App\Entity\Category;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,22 +14,62 @@ use Symfony\Component\HttpFoundation\Response;
 class BlogController extends AbstractController
 {
     /**
-     * @Route("/show", name="index")
+     * @Route("/", name="index")
      * 
      */
     public function index()
     {
-        return $this->render('index.html.twig');
+
+        $articles = $this->getDoctrine()
+            ->getRepository(Article::class)
+            ->findAll();
+
+        if (!$articles) {
+            throw $this->createNotFoundException(
+                'No article found in article\'s table.'
+            );
+        }
+
+        return $this->render(
+            'index.html.twig',
+            ['articles' => $articles]
+        );
     }
+
     /**
      * @Route("/show/{page}", requirements={"page"="[a-z0-9\-]+"},
-     * defaults = { "page":"Mon-Super-article"},
+     * defaults={"page" = null},
      * name="show")
      */
     public function show($page)
     {
-        $page = ucwords(str_replace('-',' ',$page));
+        if (!$page) {
+            throw $this->createNotFoundException('No slug has been sent to find an article in article\'s table.');
+        }
+        $page = preg_replace('/-/',' ',ucwords(trim(strip_tags($page)), "-"));
 
-        return $this->render('show.html.twig', ['page' => $page]);
+        $article = $this->getDoctrine()
+            ->getRepository(Article::class)
+            ->findOneBy(['title' => mb_strtolower($page)]);
+
+        if (!$article) {
+            throw $this->createNotFoundException(
+                'No article with ' . $page . ' title, found in article\'s table.'
+            );
+        }
+
+        return $this->render('showbyid.html.twig', [
+            'article' => $article,
+            'page' => $page,
+            ]);
     }
+
+/*  public function category($category)
+    {
+        $limit = 3;
+        $articles = $this->getDoctrine()
+            ->getRepository(Article::class)
+            ->findByCategory($category, ['id' => 'DESC'], $limit);
+        return $this->render('/blog/category.html.twig', ['articles' => $articles, 'category' => $category,]);
+    } */
 }
