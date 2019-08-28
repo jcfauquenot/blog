@@ -5,7 +5,7 @@ namespace App\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Article;
 use App\Entity\Category;
-
+use App\Repository\ArticleRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -64,12 +64,20 @@ class BlogController extends AbstractController
             ]);
     }
 
-/*  public function category($category)
+    /**
+     * @Route("/category/{category}", requirements={"category"="[a-z0-9\-]+"},
+     * defaults={"category" = null},
+     * name="show_category")
+     */
+
+    public function showByCategory($category)
     {
-        $limit = 3;
+        var_dump($category);
+       //  $limit = 3;
+
         $articles = $this->getDoctrine()
             ->getRepository(Article::class)
-            ->findByCategory($category, ['id' => 'DESC'], $limit);
-        return $this->render('/blog/category.html.twig', ['articles' => $articles, 'category' => $category,]);
-    } */
+            ->findByCategory($category, ['id' => 'DESC'] ); // $limit);
+        return $this->render('category.html.twig', ['articles' => $articles, 'category' => $category,]);
+    }
 }

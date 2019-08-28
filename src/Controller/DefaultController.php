@@ -16,6 +16,7 @@ class DefaultController extends AbstractController
      * @Route("/", name="app_index")
      * 
      */
+    
     public function index()
     {
         $articles = $this->getDoctrine()
