@@ -84,9 +84,9 @@ class BlogController extends AbstractController
      * @Route("/category/{category}",
      * methods={"GET"},
      * name="show_category")
-     */
+     */ 
 
-    public function showByCategory($category)
+    public function showByCategory(string $category)
     {
         // on récupére le nom du slug est on fait une recherche dans la category
 
