@@ -46,7 +46,7 @@ class BlogController extends AbstractController
         if (!$page) {
             throw $this->createNotFoundException('No slug has been sent to find an article in article\'s table.');
         }
-        $page = preg_replace('/-/',' ',ucwords(trim(strip_tags($page)), "-"));
+        $page = preg_replace('/-/', ' ', ucwords(trim(strip_tags($page)), "-"));
 
         $article = $this->getDoctrine()
             ->getRepository(Article::class)
@@ -61,23 +61,49 @@ class BlogController extends AbstractController
         return $this->render('showbyid.html.twig', [
             'article' => $article,
             'page' => $page,
-            ]);
+        ]);
     }
 
     /**
-     * @Route("/category/{category}", requirements={"category"="[a-z0-9\-]+"},
-     * defaults={"category" = null},
+     * @Route("/category/",
+     * name="showAllCategory")
+     */
+
+    public function showAllCategory()
+    {
+        $category = $this->getDoctrine()
+            ->getRepository(Category::class)
+            ->findAll();
+
+        return $this->render('listallcategory.html.twig', [
+            "categorys" => $category
+        ]);
+    }
+
+    /**
+     * @Route("/category/{category}",
+     * methods={"GET"},
      * name="show_category")
      */
 
     public function showByCategory($category)
     {
-        var_dump($category);
-       //  $limit = 3;
+        // on récupére le nom du slug est on fait une recherche dans la category
+
+        $category = $this->getDoctrine()
+            ->getRepository(Category::class)
+            ->findOneByName($category);
+
+        // limiter l'affichage à trois dans la iste des articles 
+        $limit = 3;
+
+        // on injecte la recherche de la category afin d'effectuer la relation avec l'article
 
         $articles = $this->getDoctrine()
             ->getRepository(Article::class)
-            ->findByCategory($category, ['id' => 'DESC'] ); // $limit);
-        return $this->render('category.html.twig', ['articles' => $articles, 'category' => $category,]);
+            // ->findAll();
+            ->findByCategory($category, ['id' => 'DESC'],  $limit);
+
+        return $this->render('category.html.twig', ['articles' => $articles]);
     }
 }

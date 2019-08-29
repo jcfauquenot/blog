@@ -1,0 +1,14 @@
+{% extends "base.html.twig" %}
+{% block content %}
+    <h1>Affichage des Category</h1>
+    {% for category in categorys %}
+        <div>
+            <h2>{{ loop.index }}/{{ category.id }}- Category :{{ category.name }}</h2>
+        </div>
+    {% else %}
+        Aucune Category trouvé.
+    {% endfor %}
+    <a href="{{ path('app_index') }}">
+        Back to homepage.
+    </a>
+{% endblock %}
