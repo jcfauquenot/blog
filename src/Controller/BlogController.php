@@ -81,29 +81,42 @@ class BlogController extends AbstractController
     }
 
     /**
-     * @Route("/category/{category}",
+     * @Route("/category/{name}",
      * methods={"GET"},
      * name="show_category")
-     */ 
+     */
 
-    public function showByCategory(string $category)
+    public function showByCategory(Category $category): Response
     {
         // on récupére le nom du slug est on fait une recherche dans la category
 
-        $category = $this->getDoctrine()
+        /* $category = $this->getDoctrine()
             ->getRepository(Category::class)
-            ->findOneByName($category);
+            ->findOneByName($category); */
 
-        // limiter l'affichage à trois dans la iste des articles 
-        $limit = 3;
+        /* limiter l'affichage à trois dans la iste des articles 
+          $limit = 3;
 
-        // on injecte la recherche de la category afin d'effectuer la relation avec l'article
+          on injecte la recherche de la category afin d'effectuer la relation avec l'article
 
-        $articles = $this->getDoctrine()
+          $articles = $this->getDoctrine()
             ->getRepository(Article::class)
-            // ->findAll();
+             ->findAll();
             ->findByCategory($category, ['id' => 'DESC'],  $limit);
+        return $this->render('category.html.twig', ['articles' => $articles]); */
 
-        return $this->render('category.html.twig', ['articles' => $articles]);
+
+        // on utilise une relation bi directionnelle pour visualiser les category en utilisant
+        // les params converters
+
+        $articles = $category->getArticles();
+
+        return $this->render(
+            'category.html.twig',
+            [
+                'category' => $category,
+                'articles' => $articles
+            ]
+        );
     }
 }
